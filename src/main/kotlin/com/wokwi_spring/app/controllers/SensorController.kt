@@ -30,7 +30,9 @@ class SensorController(
 
     @PostMapping("/send-command/{command}")
     suspend fun sendCommand(@PathVariable command: String) =
-        sendCommandUseCase.invoke(
-            SendCommandUseCase.Params(command)
-        )
+        safeExecuteSuspend {
+            sendCommandUseCase.invoke(
+                SendCommandUseCase.Params(command)
+            )
+        }
 }
