@@ -21,8 +21,10 @@ class MqttMessageHandler(
             ignoreUnknownKeys = true
         }
 
-        val createSensorData = jsonBuilder.decodeFromString<SerializableCreateSensorData>(data)
+        val sensorData = jsonBuilder
+            .decodeFromString<SerializableCreateSensorData>(data)
+            .mapToDomain()
 
-        sensorRepository.uploadMeasurement(createSensorData.mapToDomain())
+        sensorRepository.uploadMeasurement(sensorData)
     }
 }
