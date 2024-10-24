@@ -25,6 +25,14 @@ class MqttMessageHandler(
             .decodeFromString<SerializableCreateSensorData>(data)
             .mapToDomain()
 
+        if (sensorData.pir==1)
+        {
+            sensorRepository.sendCommand("servoTurnOn")
+        }
+        if (sensorData.pir==0)
+        {
+            sensorRepository.sendCommand("servoTurnOff")
+        }
         sensorRepository.uploadMeasurement(sensorData)
     }
 }
