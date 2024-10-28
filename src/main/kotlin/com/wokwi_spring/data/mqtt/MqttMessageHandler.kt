@@ -1,5 +1,7 @@
 package com.wokwi_spring.data.mqtt
 
+import com.wokwi_spring.data.constants.COMMAND_TURN_OFF_SERVO
+import com.wokwi_spring.data.constants.COMMAND_TURN_ON_SERVO
 import com.wokwi_spring.data.models.SerializableCreateSensorData
 import com.wokwi_spring.domain.repositories.SensorRepository
 
@@ -25,14 +27,11 @@ class MqttMessageHandler(
             .decodeFromString<SerializableCreateSensorData>(data)
             .mapToDomain()
 
-        if (sensorData.pir==1)
-        {
-            sensorRepository.sendCommand("servoTurnOn")
+        when (sensorData.pir) {
+            0 -> sensorRepository.sendCommand(COMMAND_TURN_OFF_SERVO)
+            1 -> sensorRepository.sendCommand(COMMAND_TURN_ON_SERVO)
         }
-        if (sensorData.pir==0)
-        {
-            sensorRepository.sendCommand("servoTurnOff")
-        }
+
         sensorRepository.uploadMeasurement(sensorData)
     }
 }
